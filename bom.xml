@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!-- The COPYRIGHT file at the top level of this repository contains the full
+     copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!-- production.bom.input -->
+        <record model="ir.ui.view" id="bom_input_view_form">
+            <field name="model">production.bom.input</field>
+            <field name="inherit" ref="production.bom_input_view_form"/>
+            <field name="name">bom_input_form</field>
+        </record>
+
+        <record model="ir.ui.view" id="bom_input_view_list">
+            <field name="model">production.bom.input</field>
+            <field name="inherit" ref="production.bom_input_view_list"/>
+            <field name="name">bom_input_list</field>
+        </record>
+
+        <!-- production.bom.output -->
+        <record model="ir.ui.view" id="bom_output_view_form">
+            <field name="model">production.bom.output</field>
+            <field name="inherit" ref="production.bom_output_view_form"/>
+            <field name="name">bom_output_form</field>
+        </record>
+
+        <record model="ir.ui.view" id="bom_output_view_list">
+            <field name="model">production.bom.output</field>
+            <field name="inherit" ref="production.bom_output_view_list"/>
+            <field name="name">bom_output_list</field>
+        </record>
+    </data>
+</tryton>

@@ -1,0 +1,31 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:production,stock_owner:"
+msgid "Stock Owner"
+msgstr "Propietari de l'estoc"
+
+msgctxt "field:production.bom.input,party_stock:"
+msgid "Party Stock"
+msgstr "Estoc del tercer"
+
+msgctxt "field:production.bom.output,party_stock:"
+msgid "Party Stock"
+msgstr "Estoc del tercer"
+
+msgctxt "help:production,stock_owner:"
+msgid ""
+"The party whose stock can be used in this production instead of company's "
+"stock."
+msgstr ""
+"El tercer l'estoc del qual s'utilitzarà en aquesta producció en comptes del "
+"de l'empresa."
+
+msgctxt "help:production.bom.input,party_stock:"
+msgid "Use stock owned by party instead of company stock."
+msgstr "Utilitzar estoc propietat del tercer en comptes del de l'empresa."
+
+msgctxt "help:production.bom.output,party_stock:"
+msgid "Produce stock owned by party instead of by company."
+msgstr "Produir estoc propietat del tercer en comptes del de l'empresa."
