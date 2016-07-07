@@ -16,10 +16,9 @@ class BOMInput:
 
     @fields.depends('product')
     def on_change_product(self):
-        res = super(BOMInput, self).on_change_product()
+        super(BOMInput, self).on_change_product()
         if self.product and self.product.may_belong_to_party:
-            res['party_stock'] = True
-        return res
+            self.party_stock = True
 
 
 class BOMOutput:
@@ -29,7 +28,7 @@ class BOMOutput:
 
     @fields.depends('product')
     def on_change_product(self):
-        res = super(BOMOutput, self).on_change_product()
+        super(BOMOutput, self).on_change_product()
         if self.product and self.product.may_belong_to_party:
-            res['party_stock'] = True
-        return res
+            self.party_stock = True
+

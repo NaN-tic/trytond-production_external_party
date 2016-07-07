@@ -19,23 +19,23 @@ class Production:
 
     @fields.depends('stock_owner')
     def on_change_product(self):
-        return super(Production, self).on_change_product()
+        super(Production, self).on_change_product()
 
     @fields.depends('stock_owner')
     def on_change_bom(self):
-        return super(Production, self).on_change_bom()
+        super(Production, self).on_change_bom()
 
     @fields.depends('stock_owner')
     def on_change_uom(self):
-        return super(Production, self).on_change_uom()
+        super(Production, self).on_change_uom()
 
     @fields.depends('stock_owner')
     def on_change_quantity(self):
-        return super(Production, self).on_change_quantity()
+        super(Production, self).on_change_quantity()
 
     @fields.depends('stock_owner', methods=['bom'])
     def on_change_stock_owner(self):
-        return self.explode_bom()
+        self.explode_bom()
 
     @fields.depends('origin', 'stock_owner')
     def on_change_origin(self):
@@ -47,9 +47,9 @@ class Production:
             Sale = None
             SaleLine = None
         try:
-            res = super(Production, self).on_change_origin()
+            super(Production, self).on_change_origin()
         except AttributeError:
-            res = {}
+            pass
         if hasattr(self, 'origin') and Sale:
             new_stock_owner = None
             if isinstance(self.origin, Sale):
@@ -59,13 +59,11 @@ class Production:
             if new_stock_owner != self.stock_owner:
                 self.stock_owner = new_stock_owner
                 if new_stock_owner:
-                    res['stock_owner'] = new_stock_owner.id
-                    res['stock_owner.rec_name'] = new_stock_owner.rec_name
+                    self.stock_owner = new_stock_owner.id
                 else:
-                    res['stock_owner'] = None
+                    self.stock_owner = None
 
                 res.update(self.explode_bom())
-        return res
 
     def _explode_move_values(self, from_location, to_location, company,
             bom_io, quantity):
