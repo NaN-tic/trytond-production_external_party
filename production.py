@@ -63,16 +63,15 @@ class Production:
                 else:
                     self.stock_owner = None
 
-                res.update(self.explode_bom())
+                self.explode_bom()
 
     def _explode_move_values(self, from_location, to_location, company,
             bom_io, quantity):
-        values = super(Production, self)._explode_move_values(from_location,
+        move = super(Production, self)._explode_move_values(from_location,
             to_location, company, bom_io, quantity)
         if bom_io.party_stock and self.stock_owner:
-            values['party_used'] = self.stock_owner.id
-            values['party_used.rec_name'] = self.stock_owner.rec_name
-        return values
+            move.party_used = self.stock_owner.id
+        return move
 
     def set_moves(self):
         # TODO: it will be better provide bom_input/output to _move()
