@@ -2,24 +2,16 @@
 # copyright notices and license terms.
 import doctest
 import unittest
+
 import trytond.tests.test_tryton
-from trytond.tests.test_tryton import test_view, test_depends
+from trytond.tests.test_tryton import ModuleTestCase
 from trytond.tests.test_tryton import doctest_setup, doctest_teardown
+from trytond.tests.test_tryton import doctest_checker
 
 
-class TestCase(unittest.TestCase):
+class TestCase(ModuleTestCase):
     'Test module'
-
-    def setUp(self):
-        trytond.tests.test_tryton.install_module('production_external_party')
-
-    def test0005views(self):
-        'Test views'
-        test_view('production_external_party')
-
-    def test0006depends(self):
-        'Test depends'
-        test_depends()
+    module = 'production_external_party'
 
 
 def suite():
@@ -28,5 +20,6 @@ def suite():
     suite.addTests(doctest.DocFileSuite(
             'scenario_production_external_party.rst',
             setUp=doctest_setup, tearDown=doctest_teardown, encoding='utf-8',
+            checker=doctest_checker,
             optionflags=doctest.REPORT_ONLY_FIRST_FAILURE))
     return suite
