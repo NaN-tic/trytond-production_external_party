@@ -1,14 +1,14 @@
 # The COPYRIGHT file at the top level of this repository contains the full
 # copyright notices and license terms.
 from trytond.pool import Pool
-from .bom import *
-from .production import *
+from . import bom
+from . import production
 
 
 def register():
     Pool.register(
-        BOMInput,
-        BOMOutput,
-        Production,
-        Move,
+        bom.BOMInput,
+        bom.BOMOutput,
+        production.Production,
+        production.Move,
         module='production_external_party', type_='model')

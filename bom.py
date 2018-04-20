@@ -4,11 +4,12 @@ from trytond.model import fields
 from trytond.pool import PoolMeta
 
 __all__ = ['BOMInput', 'BOMOutput']
-__metaclass__ = PoolMeta
+
 
 
 class BOMInput:
     __name__ = 'production.bom.input'
+    __metaclass__ = PoolMeta
     party_stock = fields.Boolean('Party Stock',
         help='Use stock owned by party instead of company stock.')
     # TODO: add any domain or check to foce product has 'may_belong_to_party'
@@ -23,6 +24,7 @@ class BOMInput:
 
 class BOMOutput:
     __name__ = 'production.bom.output'
+    __metaclass__ = PoolMeta
     party_stock = fields.Boolean('Party Stock',
         help='Produce stock owned by party instead of by company.')
 
@@ -31,4 +33,3 @@ class BOMOutput:
         super(BOMOutput, self).on_change_product()
         if self.product and self.product.may_belong_to_party:
             self.party_stock = True
-

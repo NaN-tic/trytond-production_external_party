@@ -6,11 +6,12 @@ from trytond.pyson import Eval
 from trytond.transaction import Transaction
 
 __all__ = ['Production', 'Move']
-__metaclass__ = PoolMeta
 
 
 class Production:
     __name__ = 'production'
+    __metaclass__ = PoolMeta
+
     stock_owner = fields.Many2One('party.party', 'Stock Owner', states={
             'readonly': ~Eval('state').in_(['request', 'draft']),
             }, depends=['state'],
@@ -33,7 +34,7 @@ class Production:
     def on_change_quantity(self):
         super(Production, self).on_change_quantity()
 
-    @fields.depends('stock_owner', methods=['bom'])
+    @fields.depends('stock_owner', 'bom', methods=['bom'])
     def on_change_stock_owner(self):
         self.explode_bom()
 
@@ -96,6 +97,7 @@ class Production:
 
 class Move:
     __name__ = 'stock.move'
+    __metaclass__ = PoolMeta
 
     def get_party_to_check(self, name):
         with Transaction().set_context(_check_access=False):

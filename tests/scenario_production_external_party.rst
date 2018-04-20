@@ -12,10 +12,12 @@ Imports::
     >>> from dateutil.relativedelta import relativedelta
     >>> from decimal import Decimal
     >>> from proteus import config, Model, Wizard
+    >>> from trytond.tests.tools import activate_modules
     >>> from trytond.modules.company.tests.tools import create_company, \
     ...     get_company
     >>> today = datetime.date.today()
     >>> yesterday = today - relativedelta(days=1)
+    >>> tomorrow = today + relativedelta(days=1)
 
 Create database::
 
@@ -24,10 +26,7 @@ Create database::
 
 Install production_external_party Module::
 
-    >>> Module = Model.get('ir.module')
-    >>> modules = Module.find([('name', '=', 'production_external_party')])
-    >>> Module.install([x.id for x in modules], config.context)
-    >>> Wizard('ir.module.install_upgrade').execute('upgrade')
+    >>> config = activate_modules('production_external_party')
 
 Create company::
 
@@ -50,6 +49,7 @@ Create product::
     >>> Product = Model.get('product.product')
     >>> product = Product()
     >>> template = ProductTemplate()
+    >>> template.producible = True
     >>> template.name = 'product'
     >>> template.default_uom = unit
     >>> template.type = 'goods'
@@ -137,6 +137,7 @@ Create an Inventory::
     ...         ('code', '=', 'STO'),
     ...         ])
     >>> inventory = Inventory()
+    >>> inventory.date = yesterday
     >>> inventory.location = storage
     >>> inventory_line1 = inventory.lines.new()
     >>> inventory_line1.product = component1
@@ -159,19 +160,19 @@ Create an Inventory::
 
 Check available quantities by product::
 
-    >>> with config.set_context({'locations': [storage.id],
-    ...             'stock_date_end': today}):
-    ...     component1.reload()
-    ...     component1.quantity
-    ...     component2.reload()
-    ...     component2.quantity
+    >>> lcontext = config.context
+    >>> config._context.update({'locations': [storage.id],
+    ...             'stock_date_end': today})
+    >>> component1 = Product(component1.id, config._context)
+    >>> component1.quantity
     20.0
+    >>> component2 = Product(component2.id, config._context)
+    >>> component2.quantity
     8.0
 
 Check available quantities of component 2 by party::
 
-    >>> with config.set_context({'products': [component2.id],
-    ...             'stock_date_end': today}):
+    >>> with config.set_context({'products': [component2.id]}):
     ...     customer.reload()
     ...     customer.quantity
     ...     supplier.reload()
@@ -184,8 +185,8 @@ Make a production using BoM with company stock::
     >>> Production = Model.get('production')
     >>> production = Production()
     >>> production.product = product
-    >>> production.stock_owner = customer
     >>> production.bom = bom_company_stock
+    >>> production.stock_owner = customer
     >>> production.quantity = 1
     >>> sorted([(i.quantity, i.party_used) for i in production.inputs])
     [(2.0, None), (5.0, None)]
@@ -208,10 +209,12 @@ Check available quantities by product::
     ...     component1.quantity
     ...     component2.reload()
     ...     component2.quantity
-    ...     product.reload()
-    ...     product.quantity
     15.0
     6.0
+    >>> config._context.update({'locations': [storage.id],
+    ...             'stock_date_end': today})
+    >>> product = Product(product.id, config._context)
+    >>> product.quantity
     1.0
 
 Check available quantities by party::
@@ -229,15 +232,15 @@ Check available quantities by party::
     ...             'stock_date_end': today}):
     ...     customer.reload()
     ...     customer.quantity
-    0.0
+    2.0
 
 Make a production using BoM with party stock::
 
     >>> Production = Model.get('production')
     >>> production = Production()
     >>> production.product = product
-    >>> production.stock_owner = customer
     >>> production.bom = bom_party_stock
+    >>> production.stock_owner = customer
     >>> production.quantity = 1
     >>> production.save()
     >>> sorted([(i.quantity, i.party_used.rec_name if i.party_used else None) for i in production.inputs])
@@ -276,7 +279,7 @@ Check available quantities by party::
     ...     customer.quantity
     ...     supplier.reload()
     ...     supplier.quantity
-    0.0
+    1.0
     2.0
 
     >>> with config.set_context({'products': [product.id],
@@ -340,7 +343,7 @@ Remove party from production inputs to use company's stock and produce::
 Check available quantities by product::
 
     >>> with config.set_context({'locations': [storage.id],
-    ...             'stock_date_end': today}):
+    ...             'stock_date_end': tomorrow}):
     ...     component1.reload()
     ...     component1.quantity
     ...     component2.reload()
@@ -354,16 +357,16 @@ Check available quantities by product::
 Check available quantities by party::
 
     >>> with config.set_context({'products': [component2.id],
-    ...             'stock_date_end': today}):
+    ...             'stock_date_end': tomorrow}):
     ...     customer.reload()
     ...     customer.quantity
     ...     supplier.reload()
     ...     supplier.quantity
-    0.0
+    2.0
     2.0
 
     >>> with config.set_context({'products': [product.id],
-    ...             'stock_date_end': today}):
+    ...             'stock_date_end': tomorrow}):
     ...     customer.reload()
     ...     customer.quantity
     2.0
@@ -418,8 +421,8 @@ Check available quantities by party::
     ...     customer.quantity
     ...     supplier.reload()
     ...     supplier.quantity
-    0.0
-    0.0
+    2.0
+    1.0
 
     >>> with config.set_context({'products': [product.id],
     ...             'stock_date_end': today}):
@@ -429,4 +432,3 @@ Check available quantities by party::
     ...     supplier.quantity
     2.0
     1.0
-
