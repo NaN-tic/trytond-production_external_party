@@ -7,9 +7,8 @@ __all__ = ['BOMInput', 'BOMOutput']
 
 
 
-class BOMInput:
+class BOMInput(metaclass=PoolMeta):
     __name__ = 'production.bom.input'
-    __metaclass__ = PoolMeta
     party_stock = fields.Boolean('Party Stock',
         help='Use stock owned by party instead of company stock.')
     # TODO: add any domain or check to foce product has 'may_belong_to_party'
@@ -22,9 +21,8 @@ class BOMInput:
             self.party_stock = True
 
 
-class BOMOutput:
+class BOMOutput(metaclass=PoolMeta):
     __name__ = 'production.bom.output'
-    __metaclass__ = PoolMeta
     party_stock = fields.Boolean('Party Stock',
         help='Produce stock owned by party instead of by company.')
 

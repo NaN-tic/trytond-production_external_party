@@ -8,9 +8,8 @@ from trytond.transaction import Transaction
 __all__ = ['Production', 'Move']
 
 
-class Production:
+class Production(metaclass=PoolMeta):
     __name__ = 'production'
-    __metaclass__ = PoolMeta
 
     stock_owner = fields.Many2One('party.party', 'Stock Owner', states={
             'readonly': ~Eval('state').in_(['request', 'draft']),
@@ -95,9 +94,8 @@ class Production:
                     output_.party_used = self.stock_owner
 
 
-class Move:
+class Move(metaclass=PoolMeta):
     __name__ = 'stock.move'
-    __metaclass__ = PoolMeta
 
     def get_party_to_check(self, name):
         with Transaction().set_context(_check_access=False):

@@ -156,7 +156,7 @@ Create an Inventory::
     >>> inventory.save()
     >>> Inventory.confirm([inventory.id], config.context)
     >>> inventory.state
-    u'done'
+    'done'
 
 Check available quantities by product::
 
@@ -244,12 +244,12 @@ Make a production using BoM with party stock::
     >>> production.quantity = 1
     >>> production.save()
     >>> sorted([(i.quantity, i.party_used.rec_name if i.party_used else None) for i in production.inputs])
-    [(2.0, u'Customer'), (5.0, None)]
+    [(2.0, 'Customer'), (5.0, None)]
     >>> output, = production.outputs
     >>> output.quantity
     1.0
     >>> output.party_used.rec_name
-    u'Customer'
+    'Customer'
     >>> production.click('wait')
     >>> production.reload()
     >>> production.click('assign_try')
@@ -298,12 +298,12 @@ Try to make another production with BoM using customer stock::
     >>> production.save()
     >>> sorted([(i.quantity, i.party_used.rec_name if i.party_used else None)
     ...         for i in production.inputs])
-    [(2.0, u'Customer'), (5.0, None)]
+    [(2.0, 'Customer'), (5.0, None)]
     >>> output, = production.outputs
     >>> output.quantity
     1.0
     >>> output.party_used.rec_name
-    u'Customer'
+    'Customer'
     >>> production.click('wait')
     >>> production.click('assign_try')
     False
@@ -316,10 +316,10 @@ Try to use stock from different party to move than production's stock owner::
     ...         input.party_used = supplier
     >>> production.save()
     >>> production.stock_owner.rec_name
-    u'Customer'
+    'Customer'
     >>> sorted([(i.quantity, i.party_used.rec_name if i.party_used else None)
     ...         for i in production.inputs])
-    [(2.0, u'Supplier'), (5.0, None)]
+    [(2.0, 'Supplier'), (5.0, None)]
     >>> production.click('wait')
     >>> try:
     ...     production.click('assign_try')
@@ -380,19 +380,19 @@ Make another production with BoM using supplier stock::
     >>> production.quantity = 1
     >>> sorted([(i.quantity, i.party_used.rec_name if i.party_used else None)
     ...         for i in production.inputs])
-    [(2.0, u'Customer'), (5.0, None)]
+    [(2.0, 'Customer'), (5.0, None)]
     >>> output, = production.outputs
     >>> output.quantity
     1.0
     >>> output.party_used.rec_name
-    u'Customer'
+    'Customer'
     >>> production.stock_owner = supplier
     >>> sorted([(i.quantity, i.party_used.rec_name if i.party_used else None)
     ...         for i in production.inputs])
-    [(2.0, u'Supplier'), (5.0, None)]
+    [(2.0, 'Supplier'), (5.0, None)]
     >>> output, = production.outputs
     >>> output.party_used.rec_name
-    u'Supplier'
+    'Supplier'
     >>> production.click('wait')
     >>> production.click('assign_try')
     True
