@@ -34,7 +34,7 @@ class Production:
     def on_change_quantity(self):
         super(Production, self).on_change_quantity()
 
-    @fields.depends('stock_owner', 'bom', methods=['bom'])
+    @fields.depends('stock_owner', 'bom', methods=['on_change_bom'])
     def on_change_stock_owner(self):
         self.explode_bom()
 
