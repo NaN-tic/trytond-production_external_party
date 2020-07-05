@@ -11,7 +11,6 @@ MODULE = 'production_external_party'
 PREFIX = 'nantic'
 MODULE2PREFIX = {
     'stock_external_party': 'nantic',
-    'production_origin': 'nantic',
     }
 
 
@@ -64,12 +63,6 @@ dependency_links = [
     ('hg+https://bitbucket.org/nantic/'
         'trytond-stock_external_party@%(branch)s'
         '#egg=nantic-stock_external_party-%(series)s' % {
-            'branch': branch,
-            'series': series,
-            }),
-    ('hg+https://bitbucket.org/nantic/'
-        'trytond-production_origin@%(branch)s'
-        '#egg=nantic-production_origin-%(series)s' % {
             'branch': branch,
             'series': series,
             }),
