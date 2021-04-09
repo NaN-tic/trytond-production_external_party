@@ -52,9 +52,9 @@ class Production(metaclass=PoolMeta):
             pass
         if hasattr(self, 'origin') and Sale:
             new_stock_owner = None
-            if isinstance(self.origin, Sale):
+            if isinstance(self.origin, Sale) and self.origin.id >= 0:
                 new_stock_owner = self.origin.party
-            elif isinstance(self.origin, SaleLine):
+            elif isinstance(self.origin, SaleLine) and self.origin.id >= 0:
                 new_stock_owner = self.origin.sale.party
             if new_stock_owner != self.stock_owner:
                 self.stock_owner = new_stock_owner
